@@ -1,4 +1,4 @@
 hyd-weixinpublic
 ================
 
-hyd
+hyd-weixinpublic
