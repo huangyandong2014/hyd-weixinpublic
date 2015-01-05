@@ -2,7 +2,6 @@
 /**
  * 数据库配置
  */
-echo 'ddd';
 return array(
 	'DB_TYPE'	=>  'mysql'			// 数据库类型
 	, 'DB_HOST'	=>  'localhost' 	// 服务器地址

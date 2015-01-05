@@ -11,8 +11,9 @@ return array(
 	/*默认设定*/
 	, 'ACTION_SUFFIX'		=>	'Action' 	//方法名后缀
 	, 'DEFAULT_THEME'		=>	'default'	//默认主题
+	, 'DEFAULT_CHARSET'		=>	'UTF-8'		//默认编码
 			
-	/* 模板引擎设置 */
+	/*模板引擎设置*/
 	, 'TMPL_ENGINE_TYPE'	=>  'Smarty'	//默认模板引擎,Smarty
 	, 'TMPL_L_DELIM'		=>  '{'			// 模板引擎普通标签开始标记
     , 'TMPL_R_DELIM'		=>  '}'			// 模板引擎普通标签结束标记
@@ -20,10 +21,21 @@ return array(
 	, 'TMPL_DETECT_THEME'	=>  false       // 自动侦测模板主题
 	, 'TMPL_TEMPLATE_SUFFIX'=>  '.tpl'     // 默认模板文件后缀
 	
-	/* 错误设置 */
+	/*错误设置*/
 	, 'ERROR_MESSAGE'		=>  '页面错误！请稍后再试～' //错误显示信息,非调试模式有效
 	, 'SHOW_ERROR_MSG'		=>  false    // 显示错误信息
 	, 'TRACE_MAX_RECORD'	=>  100    // 每个级别的错误信息 最大记录数
+	
+	/*多语言设置*/
+	, 'LANG_SWITCH_ON'		=>  true	
+	, 'DEFAULT_LANG'		=>	'zh-cn'
+	, 'LANG_LIST'			=>	'zh-cn'
+		
+	/*自动加载命名空间*/
+	, 'AUTOLOAD_NAMESPACE'	=>	array(
+		'Table'		=>	COMMON_PATH . 'Tables/'
+		, 'Helper'	=>	COMMON_PATH . 'Helper/'	
+	)
 		
 	/*加载扩展配置*/
 	, 'LOAD_EXT_CONFIG'	=>	'db,cookie,log,pages'
