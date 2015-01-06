@@ -14,6 +14,12 @@ define('APP_DEBUG', TRUE);
 define('APP_PATH', './app/');
 
 /**
+ * 项目ID和KEY
+ */
+define('APP_ID', 'hyd-weixinpublic');
+define('APP_KEY', 'dauduwy32347&&2819#@(*!(*@(#(#(4hu#*');
+
+/**
  * 公共目录
  */
 define('COMMON_PATH', './common/');

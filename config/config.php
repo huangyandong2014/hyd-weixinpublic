@@ -34,7 +34,8 @@ return array(
 	/*自动加载命名空间*/
 	, 'AUTOLOAD_NAMESPACE'	=>	array(
 		'Table'		=>	COMMON_PATH . 'Tables/'
-		, 'Helper'	=>	COMMON_PATH . 'Helper/'	
+		, 'Helper'	=>	COMMON_PATH . 'Helper/'
+		, 'Weixin'	=>	COMMON_PATH . 'Weixin/'
 	)
 		
 	/*加载扩展配置*/
