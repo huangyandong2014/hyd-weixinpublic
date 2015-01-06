@@ -9,7 +9,7 @@ class PublicAccountInfo extends BaseTable {
 	protected $tableName = 'public_account_info';
 	
 	/*添加公众号信息*/
-	public function addAccount($openID, $name, $headimg, $wechat, $appID, $appSecret, $type=0, $status = 0) {
+	public function addAccount($openID, $name, $headimg, $wechat, $appID, $appSecret, $apiType=0, $type=0, $status = 0) {
 		if(!$this->accountExists($openID)) {
 			$addTime = time();
 			$data = array(
@@ -20,6 +20,7 @@ class PublicAccountInfo extends BaseTable {
 				, 'type'		=>	intval($type)
 				, 'appid'		=>	$appID
 				, 'appsecret'	=>	$appSecret
+				, 'apitype'		=>	$apiType
 				, 'encodingaeskey'	=>	$this->makeAESKey($openID, $appID)
 				, 'token'		=>	$this->makeToken($openID, $addTime)
 				, 'status'		=>	$status

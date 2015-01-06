@@ -4,6 +4,6 @@
  */
 namespace Weixin;
 
-class Responser {
+class WxBaseResponser {
 	
 }
