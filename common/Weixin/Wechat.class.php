@@ -57,7 +57,7 @@ class Wechat {
 	 */
 	static public function isValid() {
 		if(empty(self::$openid) || -1 == self::$status)	return false;
-		$tmpArr = array(self::$token, self::$getparams['timestamp'], self::$getparams['nonce']);
+		$tmpArr = array(self::$getparams['encrypt_msg'], self::$token, self::$getparams['timestamp'], self::$getparams['nonce']);
 		sort($tmpArr, SORT_STRING);
 		$tmpStr = implode($tmpArr);
 		$tmpStr = sha1($tmpStr);

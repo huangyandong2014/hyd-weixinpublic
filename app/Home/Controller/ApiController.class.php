@@ -15,6 +15,7 @@ class ApiController extends Controller {
 		$signature	= I('get.signature', '');
 		$timestamp	= I('get.timestamp', '');
 		$nonce		= I('get.nonce', '');
+		$encrypt_msg= I('get.encrypt_msg', '');
 		$echostr 	= I('get.echostr', '');
 		$rawData	= I('globals.HTTP_RAW_POST_DATA', '');
 		
@@ -43,6 +44,7 @@ class ApiController extends Controller {
 			, 'timestamp'	=>	$timestamp
 			, 'nonce'		=>	$nonce
 			, 'echostr'		=>	$echostr
+			, 'encrypt_msg'	=>	$encrypt_msg
 		));													//GET得到的参数
 		Wechat::setPostParams($rawData);					//POST得到的参数
 		Wechat::setRecordRequest(true);						//记录用户请求

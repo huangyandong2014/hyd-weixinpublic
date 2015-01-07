@@ -4,6 +4,7 @@
  */
 namespace Table;
 use Table\BaseTable;
+use Helper\Util;
 
 class PublicAccountInfo extends BaseTable {
 	protected $tableName = 'public_account_info';
@@ -45,7 +46,7 @@ class PublicAccountInfo extends BaseTable {
 			, 'type'		=>	intval($type)
 			, 'appid'		=>	$appID
 			, 'appsecret'	=>	$appSecret
-			, 'encodingaeskey'=>(false===$encodingaeskey?$this->generateAESKey():$encodingaeskey)
+			, 'encodingaeskey'=>(false===$encodingaeskey?Util::generateRandomForLength(43):$encodingaeskey)
 			, 'token'		=>	(false===$token?$this->generateToken($openID,$wechat,$appID,time()):$token)
 			, 'signtype'	=>	intval($signtype)
 			, 'status'		=>	intval($status)
@@ -79,18 +80,5 @@ class PublicAccountInfo extends BaseTable {
 	 */
 	public function generateToken($openID,$wechat,$appID,$time) {
 		return md5($openID.$wechat.$appID.$time.$openID);
-	}
-	
-	/**
-	 * 生成EncodingAESKey
-	 */
-	public function generateAESKey() {
-		$str='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-		$key = '';
-		for($i=0;$i<43;$i++) {
-			$v = mt_rand(0,43);
-			$key.= $str[$v];
-		}
-		return $key;
 	}
 }
