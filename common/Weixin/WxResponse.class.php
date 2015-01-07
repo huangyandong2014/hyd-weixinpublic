@@ -6,45 +6,49 @@ namespace Weixin;
 use Table\PublicAccountMenu;
 
 class WxResponse {
-	static protected $postData = array();
-	static protected $responseData = array();
+	static protected $logTurnOn = true;				//日志开关
+	static protected $publicaccountinfo = array();	//公众号信息
+	static protected $requestData = array();		//解析后的请求参数
+	static protected $responseData = array();		//回复数据
 	
-	//设置postData
-	static public function setPostData($postData) {
-		self::$postData = $postData;
-	}
-	
-	//获得postData
-	static public function postData() {
-		return self::$postData;
-	}
-	
-	//获得responseData
-	static public function responseData() {
-		return self::$responseData;
-	}
-	
-	//生成responseData
-	static public function generateResponseData() {
-		//1.获取公众
+	/**
+	 * 处理请求，生成responseData数据
+	 */
+	static public function handleRequestData() {
 		
-		$type = 'text';
-		
-		self::$responseData = array(
-			'openid'		=>	self::$postData['openid']
-			, 'wechat'		=>	self::$postData['wechat']
-			, 'type'		=>	$type
-			, 'createtime'	=>	time()
-		);
 	}
 	
-	//记录日志
+	/**
+	 * 输出回复
+	 */
+	static public function output() {
+		
+	}
+	
+	/**
+	 * 记录日志
+	 */
 	static public function record() {
 		
 	}
 	
-	//输出回复
-	static public function output() {
-		self::record();
+	/*设置日志开关*/
+	static public function setLogTurnOn($t=true) {
+		self::$logTurnOn = (boolean)$t;
+	}
+	
+	/*设置公众号信息*/
+	static public function setPublicAccountInfo($info) {
+		self::$publicaccountinfo = $info;
+	}
+	
+	/*设置请求数据*/
+	static public function setRequestData($d) {
+		self::$requestData = $d;
+	}
+	
+	/*返回回复数据*/
+	static public function responseData() {
+		return self::$responseData;
 	}
 }

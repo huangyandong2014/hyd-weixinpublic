@@ -8,9 +8,9 @@ CREATE TABLE `wx_public_account_info`(
 	`type` tinyint(1) NOT NULL DEFAULT 0 COMMENT '公众号类型，0未认证，1认证订阅号，2认证服务号',
 	`appid` varchar(255) NOT NULL COMMENT 'APPID',
 	`appsecret`	varchar(255) NOT NULL COMMENT 'APPSecret',
-	`encodingaeskey` varchar(255) COMMENT 'EncodingAESKey',
+	`encodingaeskey` varchar(43) COMMENT 'EncodingAESKey,固定为43个字符，a-z，A-Z，0-9',
 	`token` varchar(255) NOT NULL COMMENT 'Token',
-	`apitype` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'API接口加密方式，0明文，1兼容，2安全模式',
+	`signtype` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'API接口加密方式，0明文，1兼容，2安全模式',
 	`status` tinyint(1) DEFAULT 0 COMMENT '状态，-1禁用，0未接入，1接入',
 	`addtime` int(11) NOT NULL DEFAULT 0 COMMENT '添加时间戳',
 	PRIMARY KEY(`id`)
@@ -28,7 +28,19 @@ CREATE TABLE `wx_public_account_request`(
 	PRIMARY KEY(`id`)
 );
 
--- 3. wechat menu
+-- 3. wechat public response log
+CREATE TABLE `wx_public_account_response`(
+	`id` int unsigned AUTO_INCREMENT COMMENT '自增ID',
+	`openid` varchar(255) NOT NULL COMMENT '微信公众号OpenID',
+	`wechat` varchar(100) NOT NULL COMMENT '接收消息的微信号',
+	`type` varchar(55) NOT NULL DEFAULT 'text' COMMENT '消息类型',
+	`content` text COMMENT '消息主要内容',
+	`extra` text COMMENT '消息额外内容',
+	`addtime` int(11) NOT NULL DEFAULT 0 COMMENT '添加时间戳',
+	PRIMARY KEY(`id`)
+);
+
+-- 4. wechat menu
 CREATE TABLE `wx_wechat_menu`(
 	`id` int unsigned AUTO_INCREMENT COMMENT '自增ID',
 	`name` varchar(55) NOT NULL COMMENT '菜单名',
@@ -40,7 +52,7 @@ CREATE TABLE `wx_wechat_menu`(
 	PRIMARY KEY(`id`) 
 );
 
--- 4. wechat public menu
+-- 5. wechat public menu
 CREATE TABLE `wx_public_account_menu`(
 	`id` int unsigned AUTO_INCREMENT COMMENT '自增ID',
 	`openid` varchar(255) NOT NULL COMMENT '微信公众号OpenID',
@@ -51,14 +63,3 @@ CREATE TABLE `wx_public_account_menu`(
 	PRIMARY KEY(`id`)
 );
 
--- 5. wechat public response log
-CREATE TABLE `wx_public_account_response`(
-	`id` int unsigned AUTO_INCREMENT COMMENT '自增ID',
-	`openid` varchar(255) NOT NULL COMMENT '微信公众号OpenID',
-	`wechat` varchar(100) NOT NULL COMMENT '接收消息的微信号',
-	`type` varchar(55) NOT NULL DEFAULT 'text' COMMENT '消息类型',
-	`content` text COMMENT '消息主要内容',
-	`extra` text COMMENT '消息额外内容',
-	`addtime` int(11) NOT NULL DEFAULT 0 COMMENT '添加时间戳',
-	PRIMARY KEY(`id`)
-);
