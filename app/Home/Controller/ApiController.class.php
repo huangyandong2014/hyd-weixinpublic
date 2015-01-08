@@ -3,9 +3,11 @@
  *	公众号接入
  */
 namespace Home\Controller;
+
 use Think\Controller;
-use Weixin\Wechat;
 use Table\PublicAccountInfo;
+use Weixin\WxUtil;
+use Weixin\Wechat;
 
 class ApiController extends Controller {
 	//微信公众号接入
@@ -14,20 +16,28 @@ class ApiController extends Controller {
 		$openID 	= I('get.openid', false);
 		$signature	= I('get.signature', '');
 		$timestamp	= I('get.timestamp', '');
-		$nonce		= I('get.nonce', '');
-		$encrypt_msg= I('get.encrypt_msg', '');
 		$echostr 	= I('get.echostr', '');
-		$rawData	= I('globals.HTTP_RAW_POST_DATA', '');
+		$nonce		= I('get.nonce', '');
+		$signType 	= I('get.encrypt_type', 'RAW', 'strtoupper');
+		$msgSign 	= I('get.msg_signature');
+		$rawData 	= I('globals.HTTP_RAW_POST_DATA');
 		
 		//1.OpenID没传递
-		if(false === $openID)	exit;
+		if(false === $openID) exit;
 		
 		//2.获取公众号信息
 		$publicObj = new PublicAccountInfo;
 		$info = $publicObj->getRecordByOpenID($openID);
 		if(empty($info) || '-1' == $info['status']) exit; //不存在,或禁用
 		
-		//3.设置公众号接入相关信息
+		//3.判断加密方式
+		if('AES' == $signType) {
+			//AES加密
+			$rawData = WxUtil::decryptMsg($rawData, $msgSign, $timestamp, $nonce
+					, $info['openid'], $info['token'], $info['encodingaeskey']);
+		}
+		
+		//4.设置公众号接入相关信息
 		Wechat::setOpenID($info['openid']);					//公众号OpenID
 		Wechat::setName($info['name']);						//公众号名
 		Wechat::setHeadImg($info['headimg']);				//头像URL地址

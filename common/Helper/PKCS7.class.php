@@ -1,12 +1,12 @@
 <?php
 /**
- * PKCS7Encoder class
+ * PKCS#7算法类
+ * 参考: http://tools.ietf.org/html/rfc2315
  *
- * 提供基于PKCS7算法的加解密接口.
  */
 namespace Helper;
 
-class PKCS7Crypt {
+class PKCS7 {
 	/**
 	 * 对需要加密的明文进行填充补位
 	 * @param $text 需要进行填充补位操作的明文
@@ -32,10 +32,8 @@ class PKCS7Crypt {
 	 * @return 删除填充补位后的明文
 	 */
 	static public function decode($text, $block_size=32) {
-		$pad = ord(substr($text, -1));
-		if ($pad < 1 || $pad > $block_size) {
-			$pad = 0;
-		}
+		$pad = ord(substr($text, -1));  //获取最后一位字符的ASCII码
+		$pad = ($pad < 1 || $pad > $block_size)?0:$pad;
 		return substr($text, 0, (strlen($text) - $pad));
 	}
 }

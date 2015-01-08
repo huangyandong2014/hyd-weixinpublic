@@ -5,24 +5,27 @@
 namespace Weixin;
 use Think\Exception;
 use Helper\Util;
-use Helper\PKCS7Crypt;
+use Helper\PKCS7;
 
 class WxCrypt {
 	/**
 	 * 加密
+	 * 	$text				要加密的文本
+	 * 	$encodingaeskey		43位长度EncodingAESKey
+	 * 	$appID				应用ID	
+	 * @return string
 	 */	
 	static public function encrypt($text, $encodingaeskey, $appid) {
-		$key = base64_decode($encodingaeskey.'=');
 		try {
-			//获得16位随机字符串，填充到明文之前
-			$random = Util::generateRandomForLength(16);
-			$text = $random . pack("N", strlen($text)) . $text . $appid;
+			$key = self::_aesKey($encodingaeskey);
+			//16位随机字符+文本长度值得4为网络字节数+消息文本+appID
+			$text = Util::generateRandomForLength(16).pack("N",strlen($text)).$text.$appid;
 			// 网络字节序
 			$size = mcrypt_get_block_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
 			$module = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_CBC, '');
 			$iv = substr($key, 0, 16);
-			//使用自定义的填充方式对明文进行补位填充
-			$text = PKCS7Crypt::encode($text, 32);
+			//使用自定义的填充方式对明文进行32块大小补位填充
+			$text = PKCS7::encode($text, 32);
 			mcrypt_generic_init($module, $key, $iv);
 			//加密
 			$encrypted = mcrypt_generic($module, $text);
@@ -36,10 +39,11 @@ class WxCrypt {
 	
 	/**
 	 * 解密
+	 * 
 	 */
 	static public function decrypt($encrypted, $encodingaeskey, $appid) {
-		$key = base64_decode($encodingaeskey.'=');
 		try {
+			$key = self::_aesKey($encodingaeskey);
 			//使用BASE64对需要解密的字符串进行解码
 			$ciphertext_dec = base64_decode($encrypted);
 			$module = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_CBC, '');
@@ -52,7 +56,7 @@ class WxCrypt {
 			mcrypt_module_close($module);
 			
 			//去除补位字符
-			$result = PKCS7Encoder::decode($decrypted);
+			$result = PKCS7::decode($decrypted, 32);
 			//去除16位随机字符串,网络字节序和AppId
 			if (strlen($result) < 16) return "";
 			$content = substr($result, 16, strlen($result));
@@ -64,5 +68,13 @@ class WxCrypt {
 		} catch (Exception $e) {
 			return "";
 		}
+	}
+	
+	/**
+	 * 辅助生成AESKey
+	 */
+	static private function _aesKey($encodingAesKey) {
+		var_dump($encodingAesKey);
+		return base64_decode($encodingAesKey.'=');
 	}
 }
