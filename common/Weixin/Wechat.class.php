@@ -20,7 +20,7 @@ class Wechat {
 	static protected $appsecret ='';//公众号AppSecret
 	static protected $token = '';	//Token
 	static protected $encodingaeskey='';//EncodingAESKey
-	static protected $signtype = 0;	//消息体加密方式，0明文，1兼容，2安全
+	static protected $signtype = 'RAW';	//消息体加密方式，RAW明文，AES安全
 	static protected $status = 0;	//公众号状态，-1禁用，0未接入，1接入
 	static protected $getparams = array(); //GET参数
 	static protected $postparams = '';	//POST参数
@@ -31,7 +31,7 @@ class Wechat {
 	 * 消息回复
 	 */
 	static public function answer() {
-		if(empty(self::$postparams))	return;  //HTTP_RAW_POST_DATA为空则不回复
+		if(empty(self::$postparams)) return;  //HTTP_RAW_POST_DATA为空则不回复
 	
 		/*请求处理*/
 		WxRequest::setLogTurnOn(self::$recordRequest);
@@ -48,7 +48,7 @@ class Wechat {
 		$success = WxResponse::handleRequestData();
 		if(!$success) return;	//处理回复失败
 		self::$responseData = WxResponse::responseData();
-		WxResponse::output();
+		WxResponse::output(self::$responseData);
 		return;
 	}
 	
@@ -126,11 +126,10 @@ class Wechat {
 		self::$encodingaeskey = $aes;
 	}
 	
-	/*设置消息体加密方式，0明文，1兼容，2安全*/
+	/*设置消息体加密方式，RAW明文，AES安全*/
 	static public function setSignType($type){
-		//消息体加密方式，0明文，1兼容，2安全
-		$type = intval($type);
-		$type = in_array($type,array(0,1,2))?$type:0;
+		$type = strtoupper($type);
+		$type = in_array($type,array('RAW', 'AES'))?$type:'RAW';
 		self::$signtype = $type;
 	}
 	
