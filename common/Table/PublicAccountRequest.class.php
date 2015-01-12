@@ -32,7 +32,7 @@ class PublicAccountRequest extends BaseTable {
 	 *		
 	 */
 	public function addRecord($openID, $wechat, $type, $content, $extra) {
-		if($this->existsOpenID($openID))	return false;
+		if($this->existsID($openID))	return false;
 		$data = array(
 			'openid'		=>	$openID
 			, 'wechat'		=>	$wechat

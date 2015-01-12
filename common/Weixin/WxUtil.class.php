@@ -92,13 +92,12 @@ class WxUtil {
 			$xml = new DOMDocument;
 			$xml->loadXML($rawPostData);
 			$encrypt= $xml->getElementsByTagName('Encrypt')->item(0)->nodeValue;
-			
 			//验证安全签名
 			$tmpArr = array($encrypt, $token, $timestamp, $nonce);
 			sort($tmpArr, SORT_STRING);
 			$tmpStr = implode($tmpArr);	
 			if(sha1($tmpStr) != $msgSignature)	return false;
-			return WxCrypt::decrypt($encrypt, $encodingaeskey, $appID);
+			return WxCrypt::decrypt($encrypt, $encodingAesKey, $appID);
 		} catch(Exception $e) {
 			return false;
 		}
@@ -110,7 +109,7 @@ class WxUtil {
 	 */
 	static public function encryptMsg($text, $appID, $token, $encodingAesKey) {
 		if(empty($text) || empty($appID) || empty($token) || empty($encodingAesKey)) return false;
-		$encrypt = WxCrypt::encrypt($text, $encodingaeskey, $appID);
+		$encrypt = WxCrypt::encrypt($text, $encodingAesKey, $appID);
 		if(empty($encrypt)) return false;
 		$timestamp = time();
 		$nonce = Util::generateRandomForLength(10);

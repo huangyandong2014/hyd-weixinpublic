@@ -74,7 +74,6 @@ class WxCrypt {
 	 * 辅助生成AESKey
 	 */
 	static private function _aesKey($encodingAesKey) {
-		var_dump($encodingAesKey);
 		return base64_decode($encodingAesKey.'=');
 	}
 }

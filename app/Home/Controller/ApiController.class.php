@@ -8,6 +8,7 @@ use Think\Controller;
 use Table\PublicAccountInfo;
 use Weixin\WxUtil;
 use Weixin\Wechat;
+use Think\Storage;
 
 class ApiController extends Controller {
 	//微信公众号接入
@@ -20,7 +21,7 @@ class ApiController extends Controller {
 		$nonce		= I('get.nonce', '');
 		$signType 	= I('get.encrypt_type', 'RAW', 'strtoupper');
 		$msgSign 	= I('get.msg_signature');
-		$rawData 	= I('globals.HTTP_RAW_POST_DATA');
+		$rawData 	= $GLOBALS['HTTP_RAW_POST_DATA'];
 		
 		//1.OpenID没传递
 		if(false === $openID) exit;
@@ -34,7 +35,7 @@ class ApiController extends Controller {
 		if('AES' == $signType) {
 			//AES加密
 			$rawData = WxUtil::decryptMsg($rawData, $msgSign, $timestamp, $nonce
-					, $info['openid'], $info['token'], $info['encodingaeskey']);
+					, $info['appid'], $info['token'], $info['encodingaeskey']);
 		}
 		
 		//4.设置公众号接入相关信息
@@ -47,14 +48,13 @@ class ApiController extends Controller {
 		Wechat::setAppSecret($info['appsecret']);			//AppSecret
 		Wechat::setToken($info['token']);					//Token
 		Wechat::setEncodingAESKey($info['encodingaeskey']); //EncodingAESKey
-		Wechat::setSignType($info['signtype']);				//消息体加密方式，0明文，1兼容，2安全
+		Wechat::setSignType($signType);						//消息体加密方式，RAW明文，AES安全
 		Wechat::setStatus($info['status']);					//公众号状态，-1禁用，0未接入，1接入
 		Wechat::setGetParams(array(
 			'signature'		=>	$signature
 			, 'timestamp'	=>	$timestamp
 			, 'nonce'		=>	$nonce
 			, 'echostr'		=>	$echostr
-			, 'encrypt_msg'	=>	$encrypt_msg
 		));													//GET得到的参数
 		Wechat::setPostParams($rawData);					//POST得到的参数
 		Wechat::setRecordRequest(true);						//记录用户请求
